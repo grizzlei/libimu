@@ -27,7 +27,8 @@ imu_t imu_init()
 
     imu.accelerometer_raw = imu_vec3_create(0.f, 0.f, 0.f);
     imu.gyro_raw = imu_vec3_create(0.f, 0.f, 0.f);
-    
+
+    imu.orientation.roll = imu.orientation.pitch = imu.orientation.yaw = 0.f;
     imu.orientation_quat = imu_quaternion_create(1.f, 0.f, 0.f, 0.f);
     imu._gyro_ts = get_time_sec();
 
