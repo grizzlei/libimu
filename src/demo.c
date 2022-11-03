@@ -29,7 +29,7 @@ int terminate = 0;
 // file descriptor for serial device
 int fd_serial;
 // serial device path
-const char *fname_serial = "/dev/ttyUSB1";
+const char *fname_serial = "/dev/ttyUSB0";
 // serial baud rate
 const int32_t serial_baud = B115200;
 // configurations to set and revert when we are done with serial port
@@ -200,8 +200,7 @@ int main(int argc, char *argv[])
 			glRasterPos2f(framel + framep, framet + fonth * 11 + fonth);
 			glutBitmapString(GLUT_BITMAP_8_BY_13, "z - axis");
 		glPopAttrib();
-
-
+		
 		// switching back to 3d view
 
 		glMatrixMode(GL_PROJECTION);

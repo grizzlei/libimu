@@ -68,7 +68,7 @@ void imu_main_loop(imu_t *imu)
         {
             imu->_calibration_time = time(NULL);
             imu_set_state(imu, IMU_STATE_CALIBRATING);
-            prwar("calibration started.");
+            imu->gyro_offset = imu->accelerometer_offset = imu_vec3_create(0.f, 0.f, 0.f);
         }
         else
         {
