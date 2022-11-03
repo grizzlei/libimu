@@ -4,8 +4,10 @@ _Quaternion based IMU data processing library._
 
  ![libimu-demo](meta/resources/libimu-demo.gif)
 
+_Disclaimer: I'm not an OpenGL expert, forgive me for using legacy api calls and other bad practices in `demo.c`._
+
 ### Example use
-Here's a simplified piece of code from `demo.c`. Following code is essentially all you need to acquire the current orientation of the body. I'm not an OpenGL expert so please forgive me for using legacy api calls and other bad practices.
+Here's a simplified piece of code from `demo.c`. Following code is essentially all you need to compute the current orientation of the body.
 
 ```c
 imu = imu_init();
@@ -66,7 +68,7 @@ https://stanford.edu/class/ee267/lectures/lecture10.pdf
 
 ### License
 
-_libimu is a licence-free software, it can be used by anyone who try to build a better world._
+_libimu is a free software, it can be used by anyone who try to build a better world._
 
 MIT License
 
