@@ -200,7 +200,36 @@ int main(int argc, char *argv[])
 			glRasterPos2f(framel + framep, framet + fonth * 11 + fonth);
 			glutBitmapString(GLUT_BITMAP_8_BY_13, "z - axis");
 		glPopAttrib();
-		
+
+		GLfloat stateindicatorl = framel + framep,
+				stateindicatort = fonth * 13 + fonth;
+		char statestr[32] = {0};
+		switch (imu.state)
+		{
+			case IMU_STATE_UNCALIBRATED:
+				glColor3f(1.f, 0.f, 0.f);
+				strcpy(statestr, "state: uncalibrated");
+				break;
+			case IMU_STATE_CALIBRATING:
+				glColor3f(1.f, 0.58f, 0.f);
+				strcpy(statestr, "state: calibrating");
+				break;
+			case IMU_STATE_READY:
+				glColor3f(0.f, 1.f, 0.f);
+				strcpy(statestr, "state: ready");
+				break;
+		}
+
+		glBegin(GL_QUADS);
+			glVertex2f(stateindicatorl, stateindicatort);
+			glVertex2f(stateindicatorl + 10, stateindicatort);
+			glVertex2f(stateindicatorl + 10, stateindicatort + 10);
+			glVertex2f(stateindicatorl, stateindicatort + 10);
+		glEnd();
+		glRasterPos2f(stateindicatorl + 15, stateindicatort + 10);
+		glutBitmapString(GLUT_BITMAP_8_BY_13, statestr);
+
+
 		// switching back to 3d view
 
 		glMatrixMode(GL_PROJECTION);
