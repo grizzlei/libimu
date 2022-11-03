@@ -50,7 +50,6 @@ void imu_calibrate(imu_t *imu)
     {
         imu_priv_calib_counter = 0;
         imu_set_state(imu, IMU_STATE_READY);
-        prwar("calibration finished.");
     }
 }
 
