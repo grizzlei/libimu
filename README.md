@@ -10,8 +10,8 @@ _Disclaimer: I'm not an OpenGL expert, forgive me for using legacy api calls and
 Here's a simplified piece of code from `demo.c`. Following code is essentially all you need to compute the current orientation of the body.
 
 ```c
-imu = imu_init();
-// for no calibration, set to IMU_CALIBMODE_NEVER which is set for default within imu_init()
+imu_t imu = imu_init();
+// alternatively you can set IMU_CALIBMODE_NEVER (default) or IMU_CALIBMODE_PERIODIC
 imu_set_calibration_mode(&imu, IMU_CALIBMODE_ONCE); 
 // let's say we are using a popular imu that is mpu6050
 // and it is initialized with ±500 °/s gyro, ±4g accelerometer configurations
@@ -30,10 +30,8 @@ imu_set_accelerometer_scale_factor(&imu, 2.f/16384.f);
 
     // get orientation either in euler angles or as a quaternion as below
 
-    // orne.roll orne.pitch orne.yaw
-    imu_euler_t orne = imu.orientation;
-    // ornq.w ornq.x ornq.y ornq.z
-    imu_quaternion_t ornq = imu.orientation_quat;
+    prdbg("euler angles: %f %f %f", imu.orientation.roll, imu.orientation.pitch, imu.orientation.yaw);
+    prdbg("quaternion: %f %f %f %f", imu.orientation_quat.w, imu.orientation_quat.x, imu.orientation_quat.y, imu.orientation_quat.z);
 
 // ..
 // end of application loop
@@ -55,6 +53,8 @@ apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglf
 ### MPU6050 tool for Orange Pi and Raspberry Pi boards
 
 In `demo.c` to acquire sensor data, i've used a tool I wrote to use mpu6050 with OrangePi Zero board. You can get the tool and wiring information from https://github.com/grizzlei/mpu6050.
+
+If you wish to use another tool, please remember that expected format is: `ax,ay,az,gx,gy,gz\r\n` over serial with 115200 bps (8N1).
 
 ---
 
