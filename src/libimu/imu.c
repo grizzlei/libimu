@@ -6,9 +6,6 @@
 int16_t imu_priv_calib_counter = 0;
 int16_t const IMU_PRIV_CALIB_COUNTER_MAX = 200;
 
-imu_vec3_t imu_priv_gyro_movavg_buf[30] = {0};
-int8_t imu_priv_gyro_movavg_idx = 0;
-
 
 ////////////////////////////////////////////
 
@@ -43,12 +40,23 @@ void imu_calibrate(imu_t *imu)
 {
     if(imu_priv_calib_counter++ < IMU_PRIV_CALIB_COUNTER_MAX)
     {
-        imu->gyro_offset.x += imu->gyro_raw.x / IMU_PRIV_CALIB_COUNTER_MAX;
-        imu->gyro_offset.y += imu->gyro_raw.y / IMU_PRIV_CALIB_COUNTER_MAX;
-        imu->gyro_offset.z += imu->gyro_raw.z / IMU_PRIV_CALIB_COUNTER_MAX;
+        // these are not necessarily offset values, but for sake of consistency
+        // in naming I call them offset.
+        // if we need gravity vector in sensor frame coordinates we'll use these.
+        imu->accelerometer_offset.x += imu->accelerometer_raw.x;
+        imu->accelerometer_offset.y += imu->accelerometer_raw.y;
+        imu->accelerometer_offset.z += imu->accelerometer_raw.z;
+
+        // we will subtract these offset values from every imu->gyro_raw in imu_main_loop()
+        imu->gyro_offset.x += imu->gyro_raw.x;
+        imu->gyro_offset.y += imu->gyro_raw.y;
+        imu->gyro_offset.z += imu->gyro_raw.z;
     }
     else
     {
+        imu->accelerometer_offset = imu_vec3_scale(&imu->accelerometer_offset, 1.f / IMU_PRIV_CALIB_COUNTER_MAX);
+        imu->gyro_offset = imu_vec3_scale(&imu->gyro_offset, 1.f / IMU_PRIV_CALIB_COUNTER_MAX);
+
         imu_priv_calib_counter = 0;
         imu_set_state(imu, IMU_STATE_READY);
     }
@@ -166,11 +174,10 @@ int8_t imu_get_estimation_mode(imu_t * imu)
 void imu_process_raw_data(imu_t * imu)
 {
     // subtracting mean noise offsets from new raw values
-    imu->accelerometer = imu_vec3_dif(&imu->accelerometer_raw, &imu->accelerometer_offset);
     imu->gyro = imu_vec3_dif(&imu->gyro_raw, &imu->gyro_offset);
 
     // scaling corrected raw data to 
-    imu->accelerometer = imu_vec3_scale(&imu->accelerometer, imu->_scale_factor_accelerometer);
+    imu->accelerometer = imu_vec3_scale(&imu->accelerometer_raw, imu->_scale_factor_accelerometer);
     imu->gyro = imu_vec3_scale(&imu->gyro, imu->_scale_factor_gyro);
     
     const float alpha = 0.96f, one_minus_alpha = (1.f - alpha);

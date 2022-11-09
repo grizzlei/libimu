@@ -43,9 +43,6 @@ extern "C" {
 extern int16_t imu_priv_calib_counter;
 extern int16_t const IMU_PRIV_CALIB_COUNTER_MAX;
 
-extern imu_vec3_t imu_priv_gyro_movavg_buf[30];
-extern int8_t imu_priv_gyro_movavg_idx;
-
 ////////////////////////////////////////////
 
 
@@ -58,9 +55,13 @@ typedef struct IMU
     imu_vec3_t accelerometer;
     
     // gyro calibration offsets
+    // we will subtract these offset values from every imu->gyro_raw in imu_main_loop()
     imu_vec3_t gyro_offset;
     
-    // accelerometer calibration offsets
+    // if we need gravity vector of calibration epoch in sensor frame coordinates we'll use these.
+    // it's basically the average gravity vector from calibration.
+    // these are not necessarily offset values.
+    // for sake of consistency in naming I call them offset.
     imu_vec3_t accelerometer_offset;
     
     // raw gyro data. SET THIS USING imu_set_gyro_raw()

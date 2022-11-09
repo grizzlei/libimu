@@ -54,7 +54,7 @@ int fd_serial;
 // serial device path
 const char *fname_serial = "/dev/ttyUSB0";
 // serial baud rate
-const int32_t serial_baud = B9600;
+const int32_t serial_baud = B115200;
 // configurations to set and revert when we are done with serial port
 struct termios tiosold, tiosnew;
 
