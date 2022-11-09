@@ -7,12 +7,12 @@
 CC = gcc
 
 # define any compile-time flags
-CFLAGS	:= -Wall -Wextra -g `pkg-config glfw3 gl glu --cflags`
+CFLAGS	:= -Wall -Wextra -g
 
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
-LFLAGS = `pkg-config glfw3 gl glu --libs` -lm -lglut
+LFLAGS = -lglfw -lGL -lGLU -lm -lglut -lpthread
 
 # define output directory
 OUTPUT	:= output
