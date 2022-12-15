@@ -18,7 +18,7 @@ make install
 Here's a simplified piece of code from `demo.c`. Following code is essentially all you need to compute the current orientation of the body.
 
 ```c
-#include <imu/imu.c>
+#include <imu/imu.h>
 
 imu_t imu = imu_init();
 
