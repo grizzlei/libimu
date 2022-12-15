@@ -6,13 +6,25 @@ _Quaternion based IMU data processing library._
 
 _Disclaimer: I'm not an OpenGL expert, forgive me for using legacy api calls and other bad practices in `demo.c`._
 
+### Building libimu
+Following commands will build and install libimu on your system.
+
+```
+make
+make install
+```
+
 ### Example use
 Here's a simplified piece of code from `demo.c`. Following code is essentially all you need to compute the current orientation of the body.
 
 ```c
+#include <imu/imu.c>
+
 imu_t imu = imu_init();
+
 // alternatively you can set IMU_CALIBMODE_NEVER (default) or IMU_CALIBMODE_PERIODIC
 imu_set_calibration_mode(&imu, IMU_CALIBMODE_ONCE); 
+
 // let's say we are using a popular imu that is mpu6050
 // and it is initialized with ±500 °/s gyro, ±4g accelerometer configurations
 // then the raw data from sensors will be multiplied with below values per mpu6050 datasheet
@@ -22,17 +34,16 @@ imu_set_accelerometer_scale_factor(&imu, 2.f/16384.f);
 // application loop
 // ..
 
-    // fill ax, ay, az and gx, gy, gz from sensors
-
+    // set ax, ay, az and gx, gy, gz with values received from sensors
     imu_set_accelerometer_raw(&imu, ax, ay, az);
     imu_set_gyro_raw(&imu, gx, gy, gz);
     imu_main_loop(&imu);
 
     // get orientation either in euler angles or as a quaternion as below
-
     prdbg("euler angles: %f %f %f", imu.orientation.roll, imu.orientation.pitch, imu.orientation.yaw);
     prdbg("quaternion: %f %f %f %f", imu.orientation_quat.w, imu.orientation_quat.x, imu.orientation_quat.y, imu.orientation_quat.z);
 
+    // sleep as minimal as possible (1msec maybe)
 // ..
 // end of application loop
 
