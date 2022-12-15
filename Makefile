@@ -12,7 +12,7 @@ CFLAGS	:= -Wall -Wextra -g
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
-LFLAGS = -lglfw -lGL -lGLU -lm -lglut -lpthread
+LFLAGS = -lglfw -lGL -lGLU -lm -lglut -lpthread -limu
 
 # define output directory
 OUTPUT	:= output
@@ -27,7 +27,7 @@ INCLUDE	:= include
 LIB		:= lib
 
 ifeq ($(OS),Windows_NT)
-MAIN	:= main.exe
+MAIN	:= demo.exe
 SOURCEDIRS	:= $(SRC)
 INCLUDEDIRS	:= $(INCLUDE)
 LIBDIRS		:= $(LIB)
@@ -35,7 +35,7 @@ FIXPATH = $(subst /,\,$1)
 RM			:= del /q /f
 MD	:= mkdir
 else
-MAIN	:= main
+MAIN	:= demo
 SOURCEDIRS	:= $(shell find $(SRC) -type d)
 INCLUDEDIRS	:= $(shell find $(INCLUDE) -type d)
 LIBDIRS		:= $(shell find $(LIB) -type d)
@@ -64,8 +64,18 @@ OBJECTS		:= $(SOURCES:.c=.o)
 
 OUTPUTMAIN	:= $(call FIXPATH,$(OUTPUT)/$(MAIN))
 
-all: $(OUTPUT) $(MAIN)
-	@echo Executing 'all' complete!
+shared: $(OUTPUT) $(LIB)
+	$(CC) -fPIC -g -c -Wall -Isrc src/libimu/imu_algebra.c src/libimu/imu_math.c src/libimu/imu_utils.c src/libimu/imu.c
+	$(CC) -shared -Wl,-soname,libimu.so.0 -o libimu.so imu_utils.o imu_math.o imu_algebra.o imu.o -lc
+	mv *.o $(OUTPUT)
+	mv *.so $(OUTPUT)
+	cp $(OUTPUT)/*.so $(LIB)
+
+demo: $(OUTPUT) $(MAIN)
+	@echo Executing 'demo' complete!
+
+$(LIB):
+	$(MD) $(LIB)
 
 $(OUTPUT):
 	$(MD) $(OUTPUT)
@@ -84,8 +94,16 @@ $(MAIN): $(OBJECTS)
 clean:
 	$(RM) $(OUTPUTMAIN)
 	$(RM) $(call FIXPATH,$(OBJECTS))
+	$(RM) $(OUTPUT)/*.o
+	$(RM) $(OUTPUT)/*.so
 	@echo Cleanup complete!
 
-run: all
+run: demo
 	./$(OUTPUTMAIN)
-	@echo Executing 'run: all' complete!
+	@echo Executing 'run: demo' complete!
+
+install:
+	$(MD) /usr/local/include/imu
+	cp $(LIB)/libimu*.so /usr/local/lib/
+	cp $(SRC)/libimu/*.h /usr/local/include/imu/
+	ldconfig
