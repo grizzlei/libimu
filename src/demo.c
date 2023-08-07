@@ -80,11 +80,12 @@ int main(int argc, char *argv[])
 
 	glutInit(&argc, argv);
 
-	imu = imu_init();
-	imu_set_calibration_mode(&imu, IMU_CALIBMODE_ONCE);
+	imu = imu_init(IMU_CALIBMODE_ONCE, 2.f / 131.f, 2.f / 16384.f);
+	// following can be done using above one liner.
+	// imu_set_calibration_mode(&imu, IMU_CALIBMODE_ONCE);
 	// mpu6050 is initialized with ±500 °/s gyro, ±4g accelerometer configurations
-	imu_set_gyro_scale_factor(&imu, 2.f / 131.f);
-	imu_set_accelerometer_scale_factor(&imu, 2.f / 16384.f);
+	// imu_set_gyro_scale_factor(&imu, 2.f / 131.f);
+	// imu_set_accelerometer_scale_factor(&imu, 2.f / 16384.f);
 
 	pthread_create(&thr_serial, NULL, &runner_serial, NULL);
 	pthread_detach(thr_serial);

@@ -1,17 +1,28 @@
-## libimu v0.1
+## libimu
 
-_Quaternion based IMU data processing library._
+_Quaternion based (gimbal lock-safe), hardware independent IMU data processing library._
 
  ![libimu-demo](meta/resources/libimu-demo.gif)
 
 _Disclaimer: I'm not an OpenGL expert, forgive me for using legacy api calls and other bad practices in `demo.c`._
 
-### Building libimu
-Following commands will build and install libimu on your system.
+### Building and using libimu
+Following commands will build and install libimu on your system. Then you can include it to your project using `#include <imu/imu.h>` and compile with linker flag `-limu`.
 
 ```
 make
 make install
+```
+
+Dependencies for `demo.c` (made for Linux, no portability intended)
+
+```
+apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
+```
+To compile demo or run it directly (second line will compile and run demo.c):
+```
+make demo
+make run
 ```
 
 ### Example use
@@ -22,7 +33,7 @@ Here's a simplified piece of code from `demo.c`. Following code is essentially a
 
 imu_t imu = imu_init();
 
-// alternatively you can set IMU_CALIBMODE_NEVER (default) or IMU_CALIBMODE_PERIODIC
+// alternatively you can set IMU_CALIBMODE_NEVER or IMU_CALIBMODE_PERIODIC
 imu_set_calibration_mode(&imu, IMU_CALIBMODE_ONCE); 
 
 // let's say we are using a popular imu that is mpu6050
@@ -50,14 +61,6 @@ imu_set_accelerometer_scale_factor(&imu, 2.f/16384.f);
 ```
 
 In application loop, `ax, ay, az` and `gx, gy, gz` have to be acquired from accelerometer and gyro sensors.
-
----
-
-### Dependencies for `demo.c`
-
-```
-apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglfw3-dev
-```
 
 ---
 

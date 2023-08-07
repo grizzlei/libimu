@@ -40,12 +40,6 @@ extern "C" {
 ////////////////////////////////////////////
 
 
-extern int16_t imu_priv_calib_counter;
-extern int16_t const IMU_PRIV_CALIB_COUNTER_MAX;
-
-////////////////////////////////////////////
-
-
 typedef struct IMU 
 {
     // processed gyro data
@@ -109,13 +103,7 @@ void imu_main_loop(imu_t * imu);
 ////////////////////////////////////////////
 
 
-imu_t imu_init();
-
-
-////////////////////////////////////////////
-
-
-void imu_calibrate(imu_t * imu);
+imu_t imu_init(uint8_t calibration_mode, float scale_factor_accl, float scale_factor_gyro);
 
 
 ////////////////////////////////////////////
@@ -152,12 +140,6 @@ void imu_set_calibration_mode(imu_t * imu, int8_t mode);
 
 
 int8_t imu_get_estimation_mode(imu_t * imu);
-
-
-////////////////////////////////////////////
-
-
-void imu_process_raw_data(imu_t * imu);
 
 
 ////////////////////////////////////////////
