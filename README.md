@@ -31,16 +31,10 @@ Here's a simplified piece of code from `demo.c`. Following code is essentially a
 ```c
 #include <imu/imu.h>
 
-imu_t imu = imu_init();
-
-// alternatively you can set IMU_CALIBMODE_NEVER or IMU_CALIBMODE_PERIODIC
-imu_set_calibration_mode(&imu, IMU_CALIBMODE_ONCE); 
-
 // let's say we are using a popular imu that is mpu6050
 // and it is initialized with ±500 °/s gyro, ±4g accelerometer configurations
 // then the raw data from sensors will be multiplied with below values per mpu6050 datasheet
-imu_set_gyro_scale_factor(&imu, 2.f/131.f);
-imu_set_accelerometer_scale_factor(&imu, 2.f/16384.f);
+imu_t imu = imu_init(IMU_CALIBMODE_ONCE, 2.f / 131.f, 2.f / 16384.f);
 
 // application loop
 // ..
