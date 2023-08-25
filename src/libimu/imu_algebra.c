@@ -169,37 +169,6 @@ imu_quaternion_t imu_quaternion_scale(const imu_quaternion_t * q, float multipli
 ////////////////////////////////////////////
 
 
-float * imu_quaternion_to_rotation_mat(const imu_quaternion_t * q)
-{
-    float * matrix = malloc(16 * sizeof(float));
-
-    matrix[0] = 1.0f - 2.0f*q->y*q->y - 2.0f*q->z*q->z;
-    matrix[1] = 2.0f*q->x*q->y - 2.0f*q->z*q->w;
-    matrix[2] = 2.0f*q->x*q->z + 2.0f*q->y*q->w;
-    matrix[3] = 0;
-
-    matrix[4] = 2.0f*q->x*q->y + 2.0f*q->z*q->w;
-    matrix[5] = 1.0f - 2.0f*q->x*q->x - 2.0f*q->z*q->z;
-    matrix[6] = 2.0f*q->y*q->z - 2.0f*q->x*q->w;
-    matrix[7] = 0;
-
-    matrix[8] = 2.0f*q->x*q->z - 2.0f*q->y*q->w;
-    matrix[9] = 2.0f*q->y*q->z + 2.0f*q->x*q->w;
-    matrix[10] = 1.0f - 2.0f*q->x*q->x - 2.0f*q->y*q->y;
-    matrix[11] = 0;
-
-    matrix[12] = 0;
-    matrix[13] = 0;
-    matrix[14] = 0;
-    matrix[15] = 1;
-
-    return matrix;
-}
-
-
-////////////////////////////////////////////
-
-
 imu_vec3_t imu_quaternion_rotate_vector(const imu_quaternion_t * q, imu_vec3_t * v)
 {
     imu_quaternion_t qv = imu_quaternion_create(0., v->x, v->y, v->z);

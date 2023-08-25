@@ -37,15 +37,9 @@ typedef struct imu_vec3 {
 } imu_vec3_t;
 
 
-////////////////////////////////////////////
-
-
 typedef struct imu_quaternion {
     float w, x, y, z;
 } imu_quaternion_t;
-
-
-////////////////////////////////////////////
 
 
 typedef struct imu_euler {

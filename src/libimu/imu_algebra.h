@@ -118,12 +118,6 @@ imu_quaternion_t imu_quaternion_inverse(const imu_quaternion_t * q);
 ////////////////////////////////////////////
 
 
-float * imu_quaternion_to_rotation_mat(const imu_quaternion_t * q);
-
-
-////////////////////////////////////////////
-
-
 imu_quaternion_t imu_quaternion_normalize(const imu_quaternion_t * q);
 
 

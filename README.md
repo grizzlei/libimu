@@ -4,7 +4,6 @@ _Quaternion based (gimbal lock-safe), hardware independent IMU data processing l
 
  ![libimu-demo](meta/resources/libimu-demo.gif)
 
-_Disclaimer: I'm not an OpenGL expert, forgive me for using legacy api calls and other bad practices in `demo.c`._
 
 ### Building and using libimu
 Following commands will build and install libimu on your system. Then you can include it to your project using `#include <imu/imu.h>` and compile with linker flag `-limu`.
